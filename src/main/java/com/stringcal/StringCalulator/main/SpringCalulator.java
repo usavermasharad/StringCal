@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.stringcal.StringCalulator.ExpressionProcessorImpl;
 import com.stringcal.StringCalulator.ExpressionScriptEngine;
@@ -28,12 +29,13 @@ public class SpringCalulator implements IStringCal {
 	}
 
 	public void processExpression(MathExpression mathExpression) {
-	/*	for (String e : mathExpression.getExpression()) {
-			boolean isValid = expressionProcessor.evaluateExpression(e);
-			mapExp.put(e, isValid ? scripter.scriptExecute(e) : "Invalid");
-		}*/
-		//Lambda Expression
-		mapExp.forEach((k, v) -> System.out.println("Expression :" + k + " : Result:" + v));
+		System.out.println("Valid Expression :");
+		mathExpression.getExpression().stream().filter(e -> e != null)
+				.map(e -> expressionProcessor.evaluateExpression(e)).filter(e -> e != null).forEach(System.out::println);
+		
+		List<String> myFinalList = mathExpression.getExpression().stream().filter(e -> e != null)
+				.map(e -> expressionProcessor.evaluateExpression(e)).collect(Collectors.toList());
+		myFinalList.stream().filter(e -> e != null).map(e -> scripter.scriptExecute(e)).forEach(System.out::println);
 
 	}
 
